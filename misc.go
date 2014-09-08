@@ -12,6 +12,9 @@ with just net/http.
 See the examples at:
 https://github.com/jtolds/go-oauth2http/blob/master/examples/group/main.go
 https://github.com/jtolds/go-oauth2http/blob/master/examples/one/main.go
+
+Since this package uses github.com/gorilla/sessions (and therefore,
+github.com/gorilla/context), make sure to use context.ClearHandler or similar.
 */
 package oauth2http
 

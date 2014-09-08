@@ -14,3 +14,6 @@ https://github.com/jtolds/go-oauth2http/blob/master/examples/one/main.go
 
 Contrast to https://github.com/GoIncremental/negroni-oauth2, which requires
 negroni.
+
+Since this package uses github.com/gorilla/sessions (and therefore,
+github.com/gorilla/context), make sure to use context.ClearHandler or similar.

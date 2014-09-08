@@ -70,6 +70,12 @@ func (o *ProviderHandler) Token(r *http.Request) (*oauth2.Token, error) {
 	return o.token(session), nil
 }
 
+// Session returns a provider-specific authenticated session for the current
+// user. This session is cleared whenever a user logs out.
+func (o *ProviderHandler) Session(r *http.Request) (*sessions.Session, error) {
+	return o.store(r)
+}
+
 // LoggedIn returns true if the user is logged in with this provider
 func (o *ProviderHandler) LoggedIn(r *http.Request) (bool, error) {
 	t, err := o.Token(r)
@@ -77,7 +83,7 @@ func (o *ProviderHandler) LoggedIn(r *http.Request) (bool, error) {
 }
 
 func (o *ProviderHandler) token(session *sessions.Session) *oauth2.Token {
-	val, exists := session.Values["token"]
+	val, exists := session.Values["_token"]
 	token, correct := val.(*oauth2.Token)
 	if exists && correct && !token.Expired() {
 		return token
@@ -93,7 +99,9 @@ func (o *ProviderHandler) Logout(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	delete(session.Values, "token")
+	for name := range session.Values {
+		delete(session.Values, name)
+	}
 	return session.Save(r, w)
 }
 
@@ -138,8 +146,8 @@ func (o *ProviderHandler) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	state := newState()
-	session.Values["state"] = state
-	session.Values["redirect_to"] = redirect_to
+	session.Values["_state"] = state
+	session.Values["_redirect_to"] = redirect_to
 	err = session.Save(r, w)
 	if err != nil {
 		o.urls.handleError(w, r, 500, "session storage error", err)
@@ -162,7 +170,7 @@ func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	val, exists := session.Values["state"]
+	val, exists := session.Values["_state"]
 	existing_state, correct := val.(string)
 	if !exists || !correct {
 		o.urls.handleError(w, r, 500, "session storage error",
@@ -170,7 +178,7 @@ func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	val, exists = session.Values["redirect_to"]
+	val, exists = session.Values["_redirect_to"]
 	redirect_to, correct := val.(string)
 	if !exists || !correct {
 		o.urls.handleError(w, r, 500, "session storage error",
@@ -190,7 +198,7 @@ func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session.Values["token"] = token
+	session.Values["_token"] = token
 	err = session.Save(r, w)
 	if err != nil {
 		o.urls.handleError(w, r, 500, "session storage error", err)
