@@ -1,6 +1,18 @@
 // Copyright (C) 2014 JT Olds
 // See LICENSE for copying information
 
+/*
+go-oauth2http
+
+Go library for easily adding required oauth2 resources.
+
+Design goal is to be simple to configure, modular, easy to add, and work
+with just net/http.
+
+See the examples at:
+https://github.com/jtolds/go-oauth2http/blob/master/examples/group/main.go
+https://github.com/jtolds/go-oauth2http/blob/master/examples/one/main.go
+*/
 package oauth2http
 
 import (
