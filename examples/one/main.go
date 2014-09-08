@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	"github.com/jtolds/go-oauth2http"
+	"github.com/jtolds/go-oauth2http/utils"
 	"github.com/spacemonkeygo/flagfile"
 	"github.com/spacemonkeygo/monitor"
 	"github.com/spacemonkeygo/spacelog"
@@ -76,8 +77,8 @@ func main() {
 	logger.Notice("listening")
 
 	http.ListenAndServe(*listenAddr,
-		oauth2http.LoggingHandler(context.ClearHandler(
-			oauth2http.DirMux{
+		utils.LoggingHandler(context.ClearHandler(
+			utils.DirMux{
 				"": &SampleHandler{Prov: oauth, Restricted: false},
 				"restricted": oauth.LoginRequired(
 					&SampleHandler{Prov: oauth, Restricted: true}),

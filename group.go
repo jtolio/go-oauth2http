@@ -11,6 +11,7 @@ import (
 
 	"github.com/golang/oauth2"
 	"github.com/gorilla/sessions"
+	"github.com/jtolds/go-oauth2http/utils"
 	"github.com/spacemonkeygo/errors"
 )
 
@@ -38,7 +39,7 @@ import (
 // URL generator.
 type ProviderGroup struct {
 	handlers       map[string]*ProviderHandler
-	mux            DirMux
+	mux            utils.DirMux
 	urls           RedirectURLs
 	group_base_url string
 }
@@ -58,8 +59,9 @@ func NewProviderGroup(store sessions.Store, session_namespace string,
 		urls:           urls,
 		group_base_url: group_base_url}
 
-	g.mux = DirMux{
-		"all": DirMux{"logout": ExactHandler(http.HandlerFunc(g.logoutAll))},
+	g.mux = utils.DirMux{
+		"all": utils.DirMux{"logout": utils.ExactHandler(
+			http.HandlerFunc(g.logoutAll))},
 	}
 
 	for _, provider := range providers {

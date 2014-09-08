@@ -13,6 +13,7 @@ import (
 
 	"github.com/golang/oauth2"
 	"github.com/gorilla/sessions"
+	"github.com/jtolds/go-oauth2http/utils"
 )
 
 func init() {
@@ -53,10 +54,10 @@ func NewProviderHandler(provider *Provider, store SessionGetter,
 		store:            store,
 		handler_base_url: strings.TrimRight(handler_base_url, "/"),
 		urls:             urls}
-	h.Handler = DirMux{
-		"login":  ExactHandler(http.HandlerFunc(h.login)),
-		"logout": ExactHandler(http.HandlerFunc(h.logout)),
-		"_cb":    ExactHandler(http.HandlerFunc(h.cb))}
+	h.Handler = utils.DirMux{
+		"login":  utils.ExactHandler(http.HandlerFunc(h.login)),
+		"logout": utils.ExactHandler(http.HandlerFunc(h.logout)),
+		"_cb":    utils.ExactHandler(http.HandlerFunc(h.cb))}
 	return h
 }
 
