@@ -1,3 +1,8 @@
+// Copyright (C) 2014 JT Olds
+// See LICENSE for copying information
+
+// This example shows how to set up a web service that allows users to log in
+// via multiple OAuth2 providers
 package main
 
 import (
