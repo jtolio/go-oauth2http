@@ -141,7 +141,7 @@ func (o *ProviderHandler) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !force_prompt && o.token(session) != nil {
-		http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, redirect_to, http.StatusSeeOther)
 		return
 	}
 
@@ -160,7 +160,7 @@ func (o *ProviderHandler) login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, o.provider.AuthCodeURL(state, "online", approval_prompt),
-		http.StatusTemporaryRedirect)
+		http.StatusSeeOther)
 }
 
 func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
@@ -205,7 +205,7 @@ func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, redirect_to, http.StatusSeeOther)
 }
 
 func (o *ProviderHandler) logout(w http.ResponseWriter, r *http.Request) {
@@ -218,7 +218,7 @@ func (o *ProviderHandler) logout(w http.ResponseWriter, r *http.Request) {
 	if redirect_to == "" {
 		redirect_to = o.urls.DefaultLogoutURL
 	}
-	http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, redirect_to, http.StatusSeeOther)
 }
 
 // LoginRequired is a middleware for redirecting users to a login page if
@@ -236,7 +236,7 @@ func (o *ProviderHandler) LoginRequired(h http.Handler) http.Handler {
 			h.ServeHTTP(w, r)
 		} else {
 			http.Redirect(w, r, o.LoginURL(r.RequestURI, false),
-				http.StatusTemporaryRedirect)
+				http.StatusSeeOther)
 		}
 	})
 }

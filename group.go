@@ -170,7 +170,7 @@ func (g *ProviderGroup) logoutAll(w http.ResponseWriter, r *http.Request) {
 	if redirect_to == "" {
 		redirect_to = g.urls.DefaultLogoutURL
 	}
-	http.Redirect(w, r, redirect_to, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, redirect_to, http.StatusSeeOther)
 }
 
 // LoginRequired is a middleware for redirecting users to a login page if
@@ -191,7 +191,7 @@ func (g *ProviderGroup) LoginRequired(h http.Handler,
 			h.ServeHTTP(w, r)
 		} else {
 			http.Redirect(w, r, login_redirect(r.RequestURI),
-				http.StatusTemporaryRedirect)
+				http.StatusSeeOther)
 		}
 	})
 }

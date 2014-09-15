@@ -147,7 +147,7 @@ func main() {
 				"":      &SampleHandler{Group: group, Restricted: false},
 				"login": &LoginHandler{Group: group},
 				"logout": http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					http.Redirect(w, r, "/auth/all/logout", http.StatusTemporaryRedirect)
+					http.Redirect(w, r, "/auth/all/logout", http.StatusSeeOther)
 				}),
 				"restricted": group.LoginRequired(
 					&SampleHandler{Group: group, Restricted: true}, loginurl),

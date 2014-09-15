@@ -55,7 +55,7 @@ func (u RedirectURLs) handleError(w http.ResponseWriter, r *http.Request,
 		return
 	}
 	url := u.ErrorURL(code, msg)
-	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
 func newState() string {
