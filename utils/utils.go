@@ -71,3 +71,23 @@ func ExactHandler(h http.Handler) http.Handler {
 		h.ServeHTTP(w, r)
 	})
 }
+
+// MethodMux is an http.Handler muxer that keys off of the given HTTP request
+// method
+type MethodMux map[string]http.Handler
+
+func (m MethodMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if handler, found := m[r.Method]; found {
+		handler.ServeHTTP(w, r)
+		return
+	}
+	http.Error(w, fmt.Sprintf("bad method: %s", r.Method), 400)
+}
+
+// GetHandler makes sure the wrapped http.Handler only responds to GETs
+func GetHandler(h http.Handler) http.Handler { return MethodMux{"GET": h} }
+
+// ExactGetHandler is like ExactHandler wrapped with a GetHandler
+func ExactGetHandler(h http.Handler) http.Handler {
+	return GetHandler(ExactHandler(h))
+}

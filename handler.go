@@ -55,9 +55,9 @@ func NewProviderHandler(provider *Provider, store SessionGetter,
 		handler_base_url: strings.TrimRight(handler_base_url, "/"),
 		urls:             urls}
 	h.Handler = utils.DirMux{
-		"login":  utils.ExactHandler(http.HandlerFunc(h.login)),
-		"logout": utils.ExactHandler(http.HandlerFunc(h.logout)),
-		"_cb":    utils.ExactHandler(http.HandlerFunc(h.cb))}
+		"login":  utils.ExactGetHandler(http.HandlerFunc(h.login)),
+		"logout": utils.ExactGetHandler(http.HandlerFunc(h.logout)),
+		"_cb":    utils.ExactGetHandler(http.HandlerFunc(h.cb))}
 	return h
 }
 

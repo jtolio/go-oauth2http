@@ -60,7 +60,7 @@ func NewProviderGroup(store sessions.Store, session_namespace string,
 		group_base_url: group_base_url}
 
 	g.mux = utils.DirMux{
-		"all": utils.DirMux{"logout": utils.ExactHandler(
+		"all": utils.DirMux{"logout": utils.ExactGetHandler(
 			http.HandlerFunc(g.logoutAll))},
 	}
 
