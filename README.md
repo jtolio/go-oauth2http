@@ -1,6 +1,11 @@
 go-oauth2http
 =============
 
+*Update 2015-06-30:* this project now builds and works again, but conventions
+around Go development are moving fast around here. It's likely this project
+does this all wrong (I now question the need for the Gorilla deps, for
+example).
+
 Go library for easily adding required oauth2 resources.
 
 Design goal is to be simple to configure, modular, easy to add, and work
