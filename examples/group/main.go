@@ -11,15 +11,15 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/golang/oauth2"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	"github.com/jtolds/go-oauth2http"
 	"github.com/jtolds/go-oauth2http/utils"
 	"github.com/spacemonkeygo/flagfile"
-	"github.com/spacemonkeygo/monitor"
 	"github.com/spacemonkeygo/spacelog"
 	"github.com/spacemonkeygo/spacelog/setup"
+	"golang.org/x/oauth2"
+	"gopkg.in/spacemonkeygo/monitor.v1"
 )
 
 var (
@@ -128,10 +128,10 @@ func main() {
 
 	group, err := oauth2http.NewProviderGroup(
 		store, "oauth", "/auth", oauth2http.RedirectURLs{},
-		oauth2http.Github(&oauth2.Options{
+		oauth2http.Github(oauth2.Config{
 			ClientID:     "<client_id>",
 			ClientSecret: "<client_secret>"}),
-		oauth2http.Facebook(&oauth2.Options{
+		oauth2http.Facebook(oauth2.Config{
 			ClientID:     "<client_id>",
 			ClientSecret: "<client_secret>",
 			RedirectURL:  "http://localhost:8080/auth/facebook/_cb"}))

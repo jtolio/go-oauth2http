@@ -11,9 +11,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/golang/oauth2"
 	"github.com/gorilla/sessions"
 	"github.com/jtolds/go-oauth2http/utils"
+	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
 )
 
 func init() {
@@ -85,7 +86,7 @@ func (o *ProviderHandler) LoggedIn(r *http.Request) (bool, error) {
 func (o *ProviderHandler) token(session *sessions.Session) *oauth2.Token {
 	val, exists := session.Values["_token"]
 	token, correct := val.(*oauth2.Token)
-	if exists && correct && !token.Expired() {
+	if exists && correct && token.Valid() {
 		return token
 	}
 	return nil
@@ -154,12 +155,12 @@ func (o *ProviderHandler) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	approval_prompt := "auto"
+	opts := []oauth2.AuthCodeOption{oauth2.AccessTypeOnline}
 	if force_prompt {
-		approval_prompt = "force"
+		opts = append(opts, oauth2.ApprovalForce)
 	}
 
-	http.Redirect(w, r, o.provider.AuthCodeURL(state, "online", approval_prompt),
+	http.Redirect(w, r, o.provider.AuthCodeURL(state, opts...),
 		http.StatusSeeOther)
 }
 
@@ -191,7 +192,7 @@ func (o *ProviderHandler) cb(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := o.provider.Exchange(r.FormValue("code"))
+	token, err := o.provider.Exchange(context.Background(), r.FormValue("code"))
 	if err != nil {
 		o.urls.handleError(w, r, 500, "oauth error",
 			fmt.Errorf("transport error: %s", err))

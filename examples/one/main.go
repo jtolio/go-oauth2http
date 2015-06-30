@@ -10,15 +10,15 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang/oauth2"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	"github.com/jtolds/go-oauth2http"
 	"github.com/jtolds/go-oauth2http/utils"
 	"github.com/spacemonkeygo/flagfile"
-	"github.com/spacemonkeygo/monitor"
 	"github.com/spacemonkeygo/spacelog"
 	"github.com/spacemonkeygo/spacelog/setup"
+	"golang.org/x/oauth2"
+	"gopkg.in/spacemonkeygo/monitor.v1"
 )
 
 var (
@@ -73,7 +73,7 @@ func main() {
 	store := sessions.NewCookieStore([]byte(*cookieSecret))
 
 	oauth := oauth2http.NewProviderHandler(
-		oauth2http.Github(&oauth2.Options{
+		oauth2http.Github(oauth2.Config{
 			ClientID:     "<client_id>",
 			ClientSecret: "<client_secret>"}),
 		oauth2http.SessionFromStore(store, "oauth-github"), "/auth",

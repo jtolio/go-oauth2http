@@ -9,10 +9,10 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/golang/oauth2"
 	"github.com/gorilla/sessions"
 	"github.com/jtolds/go-oauth2http/utils"
 	"github.com/spacemonkeygo/errors"
+	"golang.org/x/oauth2"
 )
 
 // ProviderGroup is an http.Handler that keeps track of authentication for
