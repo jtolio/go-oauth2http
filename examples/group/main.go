@@ -19,7 +19,6 @@ import (
 	"github.com/spacemonkeygo/spacelog"
 	"github.com/spacemonkeygo/spacelog/setup"
 	"golang.org/x/oauth2"
-	"gopkg.in/spacemonkeygo/monitor.v1"
 )
 
 var (
@@ -121,8 +120,6 @@ func loginurl(redirect_to string) string {
 func main() {
 	flagfile.Load()
 	setup.MustSetup("example")
-	monitor.RegisterEnvironment()
-	go http.ListenAndServe(*debugAddr, monitor.DefaultStore)
 
 	store := sessions.NewCookieStore([]byte(*cookieSecret))
 
